@@ -1,14 +1,22 @@
+import { useRef } from 'react';
 import style from './section2.module.scss';
-import { motion, useScroll } from 'motion/react';
+import { motion, useScroll, useTransform } from 'motion/react';
 const Section2 = () => {
-  const scrollYProgress = useScroll().scrollYProgress
+  const ref = useRef(null);
+  const {scrollYProgress} = useScroll({
+    target: ref,
+    offset: ["start end", "end start"], // start filling when section enters, end when leaves
+  });
+
+  const scaleX = useTransform(scrollYProgress, [0, 1], [0, 1]);
 
   return (
     
-    <section className={style.section2}>
+    <section className={style.section2} ref={ref}>
       <motion.div className={style.line}
       style={{
-        scaleX: scrollYProgress
+        scaleX,
+        originX: 0,
       }}
       ></motion.div>
         <h1>Section2</h1>
